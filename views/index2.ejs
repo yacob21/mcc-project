@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/themes/jquery.mobile.flatui.css" />
+	<link rel="stylesheet" href="/themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="/css/jquery.mobile.structure-1.4.0.min.css" />
+	<script src="/js/jquery-1.10.2.min.js"></script>
+	<script src="/js/jquery.mobile-1.4.0.min.js"></script>
+	<style id="collapsible-list-item-style-flat">
+	<title>Ncwitter</title>
+		.ui-li-static.ui-collapsible > .ui-collapsible-heading {
+			margin: 0;
+		}
+
+		.ui-li-static.ui-collapsible {
+			padding: 0;
+		}
+
+		.ui-li-static.ui-collapsible > .ui-collapsible-heading > .ui-btn {
+			border-top-width: 0;
+		}
+
+		.ui-li-static.ui-collapsible > .ui-collapsible-heading.ui-collapsible-heading-collapsed > .ui-btn,
+		.ui-li-static.ui-collapsible > .ui-collapsible-content {
+			border-bottom-width: 0;
+		}
+		#judulform{
+			background-color:#50a7e6;
+			border-color:#FFFFFF;
+		}
+		body{
+			background-color:#gray;
+		}
+		#cwitt{
+			border: 2px solid #50a7e6 !important;
+		}
+		.container{
+			padding:5px;
+			background-color:white;
+			border-radius: 5px;
+			border: 1px solid #cdc9c9;
+			margin-bottom:3px;
+		}
+		.time{
+			font-size:12px;
+			text-align:right;
+		}
+		#footer{
+			background-color:#50a7e6;
+		}
+	</style>
+	<script>
+		$(document).ready(function(){
+			$.ajax({
+				url:'/getcwitt',
+				jsonp:false,
+				jsonpCallback: 'call',
+				cache: 'true',
+				type:'GET',
+				dataType:'jsonp',
+				success:function(data){
+					for(var i = 0; i<data.length; i++)
+					{
+						$("#yohan").append("<div class='container'>"+
+											"<div>"+data[i].post+"</div>"+
+											"<div class='time'>"+
+											"<span style='color:gray'>"+
+											"posted on "+data[i].time+"</span></div>"+
+											"</div>");
+					}
+				},
+				error:function(data){
+					alert("NOT OK");
+				}
+			});
+		});
+	</script>
+  </head>
+  <body>
+  
+    <div data-role="header" style="color:white" id="judulform">
+		<h1 class="ui-title" role="heading">NCwitter</h1>
+	</div>
+	<div role="main" class="ui-content jqm-content">
+		<label for="todo">Cwitt Your Mind:</label>
+		<form>
+			<div class="ui-grid-a">
+				<textarea id="cwitt"></textarea>
+			</div>
+			<div class="ui-grid-b">
+				<div class="ui-block-a">
+				  
+				</div>
+				<div class="ui-block-b">
+
+				</div>
+				<div class="ui-block-c">
+				  <button id="add" style="background-color:#50a7e6">Cwitt</button>
+				</div>
+			</div>
+			Cwitt List
+			<hr />
+			<% 
+				for(var i=0; i<Cwitt.CwittData.length; i++){			
+			%>
+			<div id="yohan">
+				
+			</div>
+			<% } %>
+		</form>
+	</div>
+	
+	<div data-role="footer" data-position="fixed" id="footer">
+		<h4>CopyRights - NC</h4>
+	</div><!-- /footer -->
+	
+  </body>
+  <script>
+	$("#add").click(function(){
+		var cwitt = $("#cwitt").val();
+		$.post("/addcwitt", {newCwitt : cwitt}).done(function(data){
+			window.location.reload();
+		});
+	});
+  </script>
+</html>
